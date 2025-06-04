@@ -1,1 +1,39 @@
+import numpy as np
 
+T = 2 * np.pi
+N = 10
+t = np.linspace(0, T, 1000)
+f = np.sign(np.sin(t))
+
+def calcular_serie_fourier_iterativa(f, t, T, N):
+    a0 = (2 / T) * np.trapz(f, t)
+    an = []
+    bn = []
+    for n in range(1, N + 1):
+        coseno = np.cos(2 * np.pi * n * t / T)
+        seno = np.sin(2 * np.pi * n * t / T)
+        an_valor = (2 / T) * np.trapz(f * coseno, t)
+        bn_valor = (2 / T) * np.trapz(f * seno, t)
+        an.append(an_valor)
+        bn.append(bn_valor)
+    return a0 / 2, an, bn
+
+def calcular_serie_fourier_recursiva(f, t, T, N):
+    a0 = (2 / T) * np.trapz(f, t)
+    def calcular_n(n):
+        if n == 0:
+            return [], []
+        an_prev, bn_prev = calcular_n(n - 1)
+        coseno = np.cos(2 * np.pi * n * t / T)
+        seno = np.sin(2 * np.pi * n * t / T)
+        an_valor = (2 / T) * np.trapz(f * coseno, t)
+        bn_valor = (2 / T) * np.trapz(f * seno, t)
+        return an_prev + [an_valor], bn_prev + [bn_valor]
+    an, bn = calcular_n(N)
+    return a0 / 2, an, bn
+
+a0_iter, an_iter, bn_iter = calcular_serie_fourier_iterativa(f, t, T, N)
+a0_rec, an_rec, bn_rec = calcular_serie_fourier_recursiva(f, t, T, N)
+
+print("Iterativo:", a0_iter, an_iter, bn_iter)
+print("Recursivo:", a0_rec, an_rec, bn_rec)
