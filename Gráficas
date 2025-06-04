@@ -1,4 +1,3 @@
-
 import numpy as np
 import time
 import matplotlib.pyplot as plt
@@ -41,7 +40,7 @@ def fourier_recursivo(f, t, T, N):
     return a0, an, bn
 
 # --- COMPARACIÓN DE TIEMPOS ---
-Ns = list(range(1, 201, 10))
+Ns = [5, 10, 20, 50]
 tiempos_iterativo = []
 tiempos_recursivo = []
 
