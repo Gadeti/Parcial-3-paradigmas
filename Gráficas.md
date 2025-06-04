@@ -5,10 +5,6 @@ Este análisis compara dos enfoques para calcular los coeficientes de la Serie d
 - **Iterativo:** Usa un bucle `for` para calcular los coeficientes.
 - **Recursivo:** Usa llamadas recursivas para calcular cada coeficiente hasta el armónico base.
 
-La función evaluada es una combinación de senos:
-
-\[ f(t) = \sin(t) + 0.5 \cdot \sin(3t) \]
-
 Evaluada en 1000 puntos uniformemente distribuidos en \([0, 2\pi)\).
 
 ---
@@ -22,7 +18,6 @@ Evaluada en 1000 puntos uniformemente distribuidos en \([0, 2\pi)\).
 | 20                     | 0.000555        | 0.000576        |  0.000021       |
 | 50                     | 0.001394        | 0.001488        |  0.000094       |
 
-> 💡 La diferencia se calcula como: `Recursivo - Iterativo`.
 
 ---
 
