@@ -1,0 +1,82 @@
+import numpy as np
+import time
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# --- FUNCIÓN PERIÓDICA ---
+T = 2 * np.pi
+t = np.linspace(0, T, 1000, endpoint=False)
+f = np.sign(np.sin(t))  # Onda cuadrada
+
+# --- IMPLEMENTACIÓN ITERATIVA ---
+def calcular_serie_fourier_iterativa(f, t, T, N):
+    a0 = (2 / T) * np.trapezoid(f, t)
+    an = []
+    bn = []
+    for n in range(1, N + 1):
+        coseno = np.cos(2 * np.pi * n * t / T)
+        seno = np.sin(2 * np.pi * n * t / T)
+        an_valor = (2 / T) * np.trapezoid(f * coseno, t)
+        bn_valor = (2 / T) * np.trapezoid(f * seno, t)
+        an.append(an_valor)
+        bn.append(bn_valor)
+    return a0, an, bn
+
+# --- IMPLEMENTACIÓN RECURSIVA ---
+def calcular_coeficientes_recursivo(f, t, T, N, n=1, an=None, bn=None):
+    if an is None: an = []
+    if bn is None: bn = []
+    if n > N:
+        return an, bn
+    coseno = np.cos(2 * np.pi * n * t / T)
+    seno = np.sin(2 * np.pi * n * t / T)
+    an_valor = (2 / T) * np.trapezoid(f * coseno, t)
+    bn_valor = (2 / T) * np.trapezoid(f * seno, t)
+    an.append(an_valor)
+    bn.append(bn_valor)
+    return calcular_coeficientes_recursivo(f, t, T, N, n + 1, an, bn)
+
+def calcular_serie_fourier_recursiva(f, t, T, N):
+    a0 = (2 / T) * np.trapezoid(f, t)
+    an, bn = calcular_coeficientes_recursivo(f, t, T, N)
+    return a0, an, bn
+
+# --- COMPARACIÓN DE TIEMPOS ---
+Ns = [5, 10, 20, 50]
+tiempos_iterativo = []
+tiempos_recursivo = []
+
+for N in Ns:
+    # Tiempo iterativo
+    inicio_i = time.time()
+    calcular_serie_fourier_iterativa(f, t, T, N)
+    fin_i = time.time()
+    tiempos_iterativo.append(fin_i - inicio_i)
+
+    # Tiempo recursivo
+    inicio_r = time.time()
+    calcular_serie_fourier_recursiva(f, t, T, N)
+    fin_r = time.time()
+    tiempos_recursivo.append(fin_r - inicio_r)
+
+# --- GRÁFICA DE TIEMPOS ---
+plt.figure(figsize=(10, 6))
+plt.plot(Ns, tiempos_iterativo, label='Iterativo', marker='o')
+plt.plot(Ns, tiempos_recursivo, label='Recursivo', marker='s')
+plt.xlabel("N (número de armónicos)")
+plt.ylabel("Tiempo de ejecución (segundos)")
+plt.title("Comparación de Tiempos: Fourier Iterativo vs Recursivo")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# --- TABLA DE COMPARACIÓN ---
+df = pd.DataFrame({
+    "N": Ns,
+    "Iterativo (s)": tiempos_iterativo,
+    "Recursivo (s)": tiempos_recursivo,
+    "Diferencia (s)": [r - i for r, i in zip(tiempos_recursivo, tiempos_iterativo)]
+})
+print("\nComparación de tiempos:\n")
+print(df.to_string(index=False))
