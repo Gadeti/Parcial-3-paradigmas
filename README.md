@@ -57,3 +57,24 @@ f = np.sign(np.sin(t))  # Onda cuadrada
 coef_iter = calcular_serie_fourier_iterativa(f, t, T, 10)
 coef_recur = calcular_serie_fourier_recursiva(f, t, T, 10)
 
+## Entrega Esperada
+
+Al final del ejercicio, se deberá entregar:
+
+1. **Implementaciones de los algoritmos**:
+   - `calcular_serie_fourier_iterativa`
+   - `calcular_serie_fourier_recursiva`
+
+2. **Gráficas o tablas** mostrando el **tiempo de ejecución** para distintos valores de `N`, tales como:
+   - `N = 5`
+   - `N = 10`
+   - `N = 20`
+   - `N = 50`
+
+3. **Análisis comparativo**, respondiendo:
+   - ¿Cuál método resulta más eficiente?
+   - ¿Por qué? (Considerando aspectos como la **complejidad temporal**, la **profundidad de recursión** y la **legibilidad del código**).
+
+🕒 **Tiempo estimado**: 90 minutos
+
+
