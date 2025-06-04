@@ -21,19 +21,23 @@ Comparar el rendimiento computacional de dos enfoques para calcular los coeficie
 
    
 
-\[
-   a_n = \frac{2}{T} \int_0^T f(t) \cos\left(\frac{2\pi n t}{T}\right) dt
-   \]
+### Cálculo de los coeficientes de la Serie de Fourier
+
+Los coeficientes de la Serie de Fourier se calculan mediante **integración numérica**, siguiendo estas ecuaciones:
 
 
-
-   
 
 \[
-   b_n = \frac{2}{T} \int_0^T f(t) \sin\left(\frac{2\pi n t}{T}\right) dt
-   \]
+a_n = \frac{2}{T} \int_0^T f(t) \cos\left(\frac{2\pi n t}{T}\right) dt
+\]
 
 
+
+
+
+\[
+b_n = \frac{2}{T} \int_0^T f(t) \sin\left(\frac{2\pi n t}{T}\right) dt
+\]
 
 4. Comparar el rendimiento de ambas funciones usando:
    - **Tiempo de ejecución** (`time` o `timeit`).
