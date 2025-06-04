@@ -56,7 +56,7 @@ f = np.sign(np.sin(t))  # Onda cuadrada
 # Comparación
 coef_iter = calcular_serie_fourier_iterativa(f, t, T, 10)
 coef_recur = calcular_serie_fourier_recursiva(f, t, T, 10)
-
+```python
 ## Entrega Esperada
 
 Al final del ejercicio, se deberá entregar:
