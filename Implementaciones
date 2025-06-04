@@ -1,39 +1,51 @@
 import numpy as np
 
+# Dominio temporal
 T = 2 * np.pi
-N = 10
 t = np.linspace(0, T, 1000)
-f = np.sign(np.sin(t))
+f = np.sin(t) + 0.5 * np.cos(2 * t)
 
-def calcular_serie_fourier_iterativa(f, t, T, N):
-    a0 = (2 / T) * np.trapz(f, t)
+# Iterativo
+def fourier_iterativo(f, t, T, N):
+    a0 = (2 / T) * np.trapezoid(f, t)
     an = []
     bn = []
     for n in range(1, N + 1):
         coseno = np.cos(2 * np.pi * n * t / T)
         seno = np.sin(2 * np.pi * n * t / T)
-        an_valor = (2 / T) * np.trapz(f * coseno, t)
-        bn_valor = (2 / T) * np.trapz(f * seno, t)
+        an_valor = (2 / T) * np.trapezoid(f * coseno, t)
+        bn_valor = (2 / T) * np.trapezoid(f * seno, t)
         an.append(an_valor)
         bn.append(bn_valor)
-    return a0 / 2, an, bn
+    return a0, an, bn
 
-def calcular_serie_fourier_recursiva(f, t, T, N):
-    a0 = (2 / T) * np.trapz(f, t)
-    def calcular_n(n):
-        if n == 0:
-            return [], []
-        an_prev, bn_prev = calcular_n(n - 1)
-        coseno = np.cos(2 * np.pi * n * t / T)
-        seno = np.sin(2 * np.pi * n * t / T)
-        an_valor = (2 / T) * np.trapz(f * coseno, t)
-        bn_valor = (2 / T) * np.trapz(f * seno, t)
-        return an_prev + [an_valor], bn_prev + [bn_valor]
-    an, bn = calcular_n(N)
-    return a0 / 2, an, bn
+# Recursivo
+def fourier_recursivo(f, t, T, N, n=1, an=None, bn=None):
+    if an is None: an = []
+    if bn is None: bn = []
+    if n > N:
+        a0 = (2 / T) * np.trapezoid(f, t)
+        return a0, an, bn
+    coseno = np.cos(2 * np.pi * n * t / T)
+    seno = np.sin(2 * np.pi * n * t / T)
+    an_valor = (2 / T) * np.trapezoid(f * coseno, t)
+    bn_valor = (2 / T) * np.trapezoid(f * seno, t)
+    an.append(an_valor)
+    bn.append(bn_valor)
+    return fourier_recursivo(f, t, T, N, n + 1, an, bn)
 
-a0_iter, an_iter, bn_iter = calcular_serie_fourier_iterativa(f, t, T, N)
-a0_rec, an_rec, bn_rec = calcular_serie_fourier_recursiva(f, t, T, N)
+# Ejecutar con N términos
+N = 10
+a0_i, an_i, bn_i = fourier_iterativo(f, t, T, N)
+a0_r, an_r, bn_r = fourier_recursivo(f, t, T, N)
 
-print("Iterativo:", a0_iter, an_iter, bn_iter)
-print("Recursivo:", a0_rec, an_rec, bn_rec)
+# Mostrar resultados
+print("Iterativo:")
+print("a0 =", round(float(a0_i), 6))
+print("an =", [round(float(val), 6) for val in an_i])
+print("bn =", [round(float(val), 6) for val in bn_i])
+
+print("\nRecursivo:")
+print("a0 =", round(float(a0_r), 6))
+print("an =", [round(float(val), 6) for val in an_r])
+print("bn =", [round(float(val), 6) for val in bn_r])
